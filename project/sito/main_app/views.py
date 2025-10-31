@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 
 def main_app(request):
     template = loader.get_template('home.html')
@@ -35,3 +36,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
+    
+def preguntas(request):
+    template = loader.get_template('preguntas.html')
+    return HttpResponse(template.render({}, request))
