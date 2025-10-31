@@ -1,7 +1,9 @@
-from django.urls import include, path
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.main_app, name='main_app'),
-    path('main_app/', views.main_app, name='main_app')
+    path('', views.main_app, name='home'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 ]
