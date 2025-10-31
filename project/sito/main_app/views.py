@@ -40,3 +40,8 @@ def logout_view(request):
 def preguntas(request):
     template = loader.get_template('preguntas.html')
     return HttpResponse(template.render({}, request))
+    
+def preguntas(request):
+    template = loader.get_template('preguntas.html')
+    context = {'username': request.user.username}
+    return HttpResponse(template.render(context, request))
