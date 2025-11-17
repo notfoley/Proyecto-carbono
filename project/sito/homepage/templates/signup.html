@@ -1,8 +1,32 @@
+<nav>
+    <ul>
+        <li>
+        <a href="/">Home</a>
+        </li>
+        <li>
+        <a href="/tasks">Calculadora</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li>
+        <a href="/logout">Logout</a>
+        </li>
+        {% else %}
+        <li>
+        <a href="/signup">Signup</a>
+        </li>
+        <li>
+          <a href="/login">login</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
 <h1>Sign up</h1>
 
 {{error}}
 
 <form method="POST">
+  
   {% csrf_token %} 
   {{form.as_p}}
 
