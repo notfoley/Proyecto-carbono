@@ -1,5 +1,85 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Calculadora</h1>
+<head>
+    <title>Calculadora de CO₂</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column; 
+            min-height: 100vh; 
+            text-align: center; 
+            padding-top: 40px;
+        }
+        form {
+            transform: scale(1.2);
+        }
+        input[type="number"] { 
+            width: 120px; 
+            padding: 8px; 
+            margin-bottom: 12px; 
+            text-align: center; 
+            font-size: 16px; 
+        }
+        button { 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+        }
+        #resultado { 
+            margin-top: 25px; 
+            font-weight: bold; 
+            color: green; 
+            font-size: 18px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de CO₂</h1>
+    
+    <form id="formulario">
+        <p>1. ¿Cuántas veces a la semana comes carne?</p>
+        <input type="number" id="carne" min="0" required><br>
+
+        <p>2. ¿Cuántos km recorres semanalmente en auto?</p>
+        <input type="number" id="auto" min="0" required><br>
+
+        <p>3. ¿Cuántos km viajas en avión cada año?</p>
+        <input type="number" id="avion" min="0" required><br>
+
+        <button type="button" id="calcularBtn">Calcular</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        const username = "{{ username }}";
+
+        document.getElementById("calcularBtn").addEventListener("click", function () {
+            const carne = parseFloat(document.getElementById("carne").value);
+            const auto = parseFloat(document.getElementById("auto").value);
+            const avion = parseFloat(document.getElementById("avion").value);
+
+            if ([carne, auto, avion].some(isNaN)) {
+                document.getElementById("resultado").textContent = "Por favor, completa todas las preguntas con números.";
+                return;
+            }
+
+            const CO2_carne = carne * 7 * 2.5;
+            const CO2_auto = auto * 0.2;
+            const CO2_avion = avion * 0.15;
+
+            const total = CO2_carne + CO2_auto + CO2_avion;
+
+            document.getElementById("resultado").textContent =
+                `${username}, has generado aproximadamente ${total.toFixed(2)} kg de CO₂.`;
+        });
+    </script>
+</body>
+</html>
 {% endblock %}
