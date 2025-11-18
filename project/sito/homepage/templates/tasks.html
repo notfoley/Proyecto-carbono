@@ -2,6 +2,7 @@
 
 {% block content %}
 <head>
+    {% if user.is_authenticated %}
     <title>Calculadora de CO₂</title>
     <style>
         body { 
@@ -80,6 +81,7 @@
                 `${username}, has generado aproximadamente ${total.toFixed(2)} kg de CO₂.`;
         });
     </script>
+    {% endif %}
 </body>
 </html>
 {% endblock %}
