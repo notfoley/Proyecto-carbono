@@ -40,7 +40,7 @@
     </style>
 </head>
 <body>
-    <h1>Calculadora de CO₂</h1>
+    <h1>Calculadora de CO₂ anual</h1>
     
     <form id="formulario">
         <p>1. ¿Cuántas veces a la semana comes carne?</p>
@@ -70,8 +70,8 @@
                 return;
             }
 
-            const CO2_carne = carne * 7 * 2.5;
-            const CO2_auto = auto * 0.2;
+            const CO2_carne = carne * 7 * 2.5 * 48;
+            const CO2_auto = auto * 0.2 * 48;
             const CO2_avion = avion * 0.15;
 
             const total = CO2_carne + CO2_auto + CO2_avion;
