@@ -34,7 +34,9 @@ def signup(request):
             })
     
 def tasks(request):
-    return render(request, 'tasks.html')
+    return render(request, 'tasks.html', {
+        "username": request.user.username
+    })
 
 def signout(request):
     logout(request)
