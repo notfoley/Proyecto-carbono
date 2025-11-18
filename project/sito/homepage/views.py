@@ -13,14 +13,13 @@ def signup(request):
     if request.method == 'GET':
         return render(request, 'signup.html', {
         'form':UserCreationForm
-    })
+        })
     else:
-        if request.POST['password1'] == request.POST['password2']:
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
             try:
-                user = User.objects.create_user(
-                    username=request.POST['username'], password=request.POST['password1']
-                    )
-                user.save()
+                user = form.save()
                 login(request, user)
                 return redirect('tasks')
             except IntegrityError:
@@ -28,9 +27,9 @@ def signup(request):
                     'form':UserCreationForm,
                     'error': 'Username is already taken'
                     })
-        return render(request, 'signup.html', {
-            'form':UserCreationForm,
-            'error': 'Passwords do not match'
+        else:
+            return render(request, 'signup.html', {
+            'form': form,
             })
     
 def tasks(request):
