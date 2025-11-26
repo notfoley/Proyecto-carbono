@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
+from .forms import SpanishUserCreationForm
 
 # Create your views here.
 def home(request):
@@ -12,10 +13,10 @@ def signup(request):
 
     if request.method == 'GET':
         return render(request, 'signup.html', {
-        'form':UserCreationForm
+        'form':SpanishUserCreationForm()
         })
     else:
-        form = UserCreationForm(request.POST)
+        form = SpanishUserCreationForm(request.POST)
 
         if form.is_valid():
             try:
@@ -24,8 +25,8 @@ def signup(request):
                 return redirect('tasks')
             except IntegrityError:
                 return render(request, 'signup.html', {
-                    'form':UserCreationForm,
-                    'error': 'Username is already taken'
+                    'form':UserCreationForm(),
+                    'error': 'Este nombre de usuario ya existe'
                     })
         else:
             return render(request, 'signup.html', {
@@ -44,7 +45,7 @@ def signout(request):
 def log_in(request):
     if request.method == "GET":
         return render(request, 'login.html', {
-            'form': AuthenticationForm
+            'form': AuthenticationForm()
         })
     else: 
         user = authenticate(
@@ -52,7 +53,7 @@ def log_in(request):
         if user is None:
             return render(request, 'login.html', {
                 'form': AuthenticationForm,
-                'error': 'Username or password incorrect'
+                'error': 'Usuario o contraseña incorrectos'
             })
         else:
             login(request, user)
