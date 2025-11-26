@@ -1,87 +1,92 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<head>
-    {% if user.is_authenticated %}
-    <title>Calculadora de CO₂</title>
-    <style>
-        body { 
-            font-family: sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: flex-start;
-            align-items: center;
-            flex-direction: column; 
-            min-height: 100vh; 
-            text-align: center; 
-            padding-top: 40px;
+<div class="container">
+    <div class="card">
+        <h1 style="text-align: center; margin-bottom: 2rem; color: #333;">Calculadora de CO₂ Anual</h1>
+        
+        {% if user.is_authenticated %}
+            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
+                Bienvenido, <strong>{{ username }}</strong>. Calcula tu huella de carbono anual.
+            </p>
+
+            <form id="formulario">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="carne">1. ¿Cuántas veces a la semana comes carne?</label>
+                    <input type="number" id="carne" class="form-control" min="0" required 
+                           style="max-width: 200px; margin: 0 auto; text-align: center;">
+                </div>
+
+                <div class="form-group">
+                    <label for="auto">2. ¿Cuántos km recorres semanalmente en auto?</label>
+                    <input type="number" id="auto" class="form-control" min="0" required 
+                           style="max-width: 200px; margin: 0 auto; text-align: center;">
+                </div>
+
+                <div class="form-group">
+                    <label for="avion">3. ¿Cuántos km viajas en avión cada año?</label>
+                    <input type="number" id="avion" class="form-control" min="0" required 
+                           style="max-width: 200px; margin: 0 auto; text-align: center;">
+                </div>
+
+                <button type="button" id="calcularBtn" class="btn btn-primary btn-block" 
+                        style="max-width: 200px; margin: 0 auto;">
+                    Calcular Huella
+                </button>
+            </form>
+
+            <div id="resultado" style="margin-top: 2rem; padding: 1rem; border-radius: 8px; display: none;"></div>
+
+        {% else %}
+            <div class="alert alert-warning text-center">
+                Debes <a href="{% url 'login' %}" style="color: #d35400;">iniciar sesión</a> para usar la calculadora.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<script>
+    const username = "{{ username }}";
+
+    document.getElementById("calcularBtn").addEventListener("click", function () {
+        const carne = parseFloat(document.getElementById("carne").value);
+        const auto = parseFloat(document.getElementById("auto").value);
+        const avion = parseFloat(document.getElementById("avion").value);
+
+        if ([carne, auto, avion].some(isNaN)) {
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.textContent = "Por favor, completa todas las preguntas con números.";
+            resultadoDiv.style.display = "block";
+            resultadoDiv.style.background = "#ffebee";
+            resultadoDiv.style.color = "#c62828";
+            resultadoDiv.style.border = "1px solid #ffcdd2";
+            return;
         }
-        form {
-            transform: scale(1.2);
-        }
-        input[type="number"] { 
-            width: 120px; 
-            padding: 8px; 
-            margin-bottom: 12px; 
-            text-align: center; 
-            font-size: 16px; 
-        }
-        button { 
-            padding: 8px 18px; 
-            font-size: 14px; 
-            cursor: pointer; 
-        }
-        #resultado { 
-            margin-top: 40px; 
-            font-weight: bold; 
-            color: green; 
-            font-size: 18px; 
-        }
-    </style>
-</head>
-<body>
-    <h1>Calculadora de CO₂ anual</h1>
-    
-    <form id="formulario">
-        <p>1. ¿Cuántas veces a la semana comes carne?</p>
-        <input type="number" id="carne" min="0" required><br>
 
-        <p>2. ¿Cuántos km recorres semanalmente en auto?</p>
-        <input type="number" id="auto" min="0" required><br>
+        const CO2_carne = carne * 7 * 2.5 * 48;
+        const CO2_auto = auto * 0.2 * 48;
+        const CO2_avion = avion * 0.15;
 
-        <p>3. ¿Cuántos km viajas en avión cada año?</p>
-        <input type="number" id="avion" min="0" required><br>
+        const total = CO2_carne + CO2_auto + CO2_avion;
 
-        <button type="button" id="calcularBtn">Calcular</button>
-    </form>
-
-    <div id="resultado"></div>
-
-    <script>
-        const username = "{{ username }}";
-
-        document.getElementById("calcularBtn").addEventListener("click", function () {
-            const carne = parseFloat(document.getElementById("carne").value);
-            const auto = parseFloat(document.getElementById("auto").value);
-            const avion = parseFloat(document.getElementById("avion").value);
-
-            if ([carne, auto, avion].some(isNaN)) {
-                document.getElementById("resultado").textContent = "Por favor, completa todas las preguntas con números.";
-                return;
-            }
-
-            const CO2_carne = carne * 7 * 2.5 * 48;
-            const CO2_auto = auto * 0.2 * 48;
-            const CO2_avion = avion * 0.15;
-
-            const total = CO2_carne + CO2_auto + CO2_avion;
-
-            document.getElementById("resultado").textContent =
-                `${username}, has generado aproximadamente ${total.toFixed(2)} kg de CO₂.`;
-        });
-    </script>
-    {% endif %}
-</body>
-</html>
+        const resultadoDiv = document.getElementById("resultado");
+        resultadoDiv.innerHTML = `
+            <h3 style="color: #2e7d32; margin-bottom: 1rem;">🌍 Resultado de tu Huella de Carbono</h3>
+            <p style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>${username}</strong>, has generado aproximadamente:</p>
+            <p style="font-size: 2rem; font-weight: bold; color: #2e7d32; margin: 0;">${total.toFixed(2)} kg de CO₂</p>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+                Desglose: Carne ${CO2_carne.toFixed(2)} kg + Auto ${CO2_auto.toFixed(2)} kg + Avión ${CO2_avion.toFixed(2)} kg
+            </p>
+        `;
+        resultadoDiv.style.display = "block";
+        resultadoDiv.style.background = "#e8f5e8";
+        resultadoDiv.style.color = "#2e7d32";
+        resultadoDiv.style.border = "1px solid #c8e6c9";
+        resultadoDiv.style.textAlign = "center";
+    });
+</script>
+{% endif %}
 {% endblock %}
