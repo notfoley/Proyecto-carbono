@@ -1,29 +1,74 @@
+{% extends 'base.html' %}
 
-<nav>
-    <ul>
-        <li>
-            <a href="/">Home</a>
-        </li>
-        <li>
-        <a href="/tasks">Calculadora</a>
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Calcula Tu Huella de Carbono</h1>
+        <p class="hero-subtitle">Descubre tu impacto ambiental y toma acción para un futuro más sostenible</p>
+        
         {% if user.is_authenticated %}
-        <li>
-            <a href="/logout">Logout</a>
-        </li>
+            <a href="{% url 'tasks' %}" class="btn btn-primary">Usar Calculadora</a>
         {% else %}
-        <li>
-            <a href="/signup">Signup</a>
-        </li>
-        <li>
-            <a href="/login">Login</a>
-        </li>
+            <a href="{% url 'signup' %}" class="btn btn-primary">Comenzar Ahora</a>
         {% endif %}
-    </ul>
-</nav>
+    </div>
+</div>
 
-<h1>Home</h1>
+<div class="container">
+    <!-- Tu mensaje personalizado en una tarjeta especial -->
+    <div class="card" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: none;">
+        <div class="text-center">
+            <h2 style="color: #1565c0; margin-bottom: 1.5rem;">🌱 Bienvenido a EcoCalc</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #37474f; margin-bottom: 1rem;">
+                Regístrate o inicia sesión para calcular tus emisiones de carbono anuales y 
+                descubrir tu impacto real en el planeta.
+            </p>
+            <p style="font-size: 1rem; line-height: 1.6; color: #546e7a; font-style: italic;">
+                💡 <strong>Nota importante:</strong> Estos cálculos son aproximados y están diseñados 
+                para darte una idea visual de los gases de efecto invernadero que produces 
+                en tu día a día como ciudadano.
+            </p>
+            
+            {% if not user.is_authenticated %}
+            <div style="margin-top: 2rem;">
+                <a href="{% url 'signup' %}" class="btn btn-primary" style="margin-right: 1rem;">Registrarse</a>
+                <a href="{% url 'login' %}" class="btn" style="background: #78909c; color: white; border: none;">Iniciar Sesión</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
-<p>Bienvenido, registrate o inicia sesión para calcular tus emisiones de carbono anuales. 
-    Recuerda que estos calculos son aproximados y están hechos para hacerte una idea visual de 
-    cuantos gases de efecto invernadero realmente produces como ciudadano
-</p>
+    <!-- Sección de características -->
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Calcula</h3>
+            <p>Calcula tu huella de carbono basada en tus actividades diarias como transporte, alimentación y viajes</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <h3>Concientiza</h3>
+            <p>Comprende cómo tus acciones cotidianas impactan en el medio ambiente y el cambio climático</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h3>Transforma</h3>
+            <p>Recibe insights y recomendaciones para reducir tu huella y contribuir a un planeta más verde</p>
+        </div>
+    </div>
+
+    <!-- Sección adicional informativa -->
+    <div class="card" style="margin-top: 3rem; background: #f1f8e9; border-left: 4px solid #7cb342;">
+        <div class="text-center">
+            <h3 style="color: #33691e; margin-bottom: 1rem;">¿Por qué calcular tu huella de carbono?</h3>
+            <p style="color: #558b2f; line-height: 1.6;">
+                Cada acción cuenta. Al conocer tu impacto ambiental, puedes tomar decisiones más informadas 
+                y contribuir activamente a la lucha contra el cambio climático. Pequeños cambios en tus 
+                hábitos pueden generar grandes diferencias para nuestro planeta.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
