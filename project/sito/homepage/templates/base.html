@@ -1,36 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora carbono</title>
+    <title>Calculadora de Carbono</title>
+    
+    <!-- Cargar archivos estáticos -->
+    {% load static %}
+    
+    <!-- CSS principal -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li>
-                <a href="/">Home</a>
-            </li>
-            <li>
-                <a href="/tasks">Calculadora</a>
-            </li>
-            {% if user.is_authenticated %}
-            <li>
-                <a href="/logout">Logout</a>
-            </li>
-            {% else %}
-                        <li>
-                <a href="/signup">Signup</a>
-            </li>
-            <li>
-                <a href="/login">Login</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    
-    {% block content %}
-    {% endblock %}
+    <!-- Header/Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🌍 EcoCalc</h2>
+            </div>
+            <nav class="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/tasks" class="nav-link">Calculadora</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="/logout" class="nav-link logout-btn">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="/signup" class="nav-link signup-btn">Signup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/login" class="nav-link login-btn">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Calculadora de Huella de Carbono. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 </body>
 </html>
